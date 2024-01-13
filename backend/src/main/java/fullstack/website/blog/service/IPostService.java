@@ -11,4 +11,10 @@ public interface IPostService {
     Page<PostResponse> findAllByStatus (SearchCriteria searchCriteria, PostStatus status);
 
     PostDto save(PostRequest postRequest);
+
+    PostDto updatePost(PostRequest postRequest, Long postId);
+
+    PostDto findByPostId(Long id);
+
+    void delete(Long postId);
 }

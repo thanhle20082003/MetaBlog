@@ -24,6 +24,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -55,24 +57,50 @@ public class PostService implements IPostService {
         Account account = accountRepository.findById(postRequest.getAccountId()).get();
         Category category = categoryRepository.findById(postRequest.getCategoryId()).get();
         Post post = postRepository.save(postMapper.applyToPost(postDto, account, category));
-
-        saveContentImages(post, postDto.getListContentImages());
-
+        saveContentImages(post, postDto);
         return postMapper.apply(post);
     }
 
-    private void saveContentImages(Post post, Set<ContentImageDto> contentImages) {
-        Set<ContentImage> contentImageEntities = contentImages.stream()
-                .map(contentImageDto -> {
-                    // Lưu file và lấy đường dẫn
-                    String storedImagePath = storageService.store(contentImageDto.getImageFile());
+    @Override
+    public PostDto updatePost(PostRequest postRequest, Long postId) {
+        PostDto postDto = postRequestMapper.apply(postRequest);
+        Account account = accountRepository.findById(postRequest.getAccountId()).get();
+        Category category = categoryRepository.findById(postRequest.getCategoryId()).get();
+        PostDto postOld = findByPostId(postId);
+        postDto.setId(postOld.getId());
+        Post post = postRepository.save(postMapper.applyToPost(postDto, account, category));
+        saveContentImages(post, postDto);
+        return postMapper.apply(post);
+    }
 
-                    // Tạo entity ContentImage từ ContentImageDto và đường dẫn đã lưu
-                    return contentImageMapper.applyToContentImage(
-                            ContentImageDto.builder().image(storedImagePath).build(), post);
-                })
-                .collect(Collectors.toSet());
+    @Override
+    public PostDto findByPostId(Long id){
+        Optional<Post> post = postRepository.findById(id);
+        return  post.map(postMapper::apply).orElse(null);
+    }
 
-        contentImageRepository.saveAll(contentImageEntities);
+    @Override
+    public void delete(Long postId) {
+        Set<ContentImage> contentImages = contentImageRepository.findAllByPostId(postId);
+        contentImageRepository.deleteAll(contentImages);
+        postRepository.deleteById(postId);
+    }
+
+    private void saveContentImages(Post post, PostDto postDto) {
+        if(!Objects.equals(post.getId(), postDto.getId())) {
+            Set<ContentImageDto> contentImages = postDto.getListContentImages();
+            Set<ContentImage> contentImageEntities = contentImages.stream()
+                    .map(contentImageDto -> {
+                        // Lưu file và lấy đường dẫn
+                        String storedImagePath = storageService.store(contentImageDto.getImageFile());
+
+                        // Tạo entity ContentImage từ ContentImageDto và đường dẫn đã lưu
+                        return contentImageMapper.applyToContentImage(
+                                ContentImageDto.builder().image(storedImagePath).build(), post);
+                    })
+                    .collect(Collectors.toSet());
+
+            contentImageRepository.saveAll(contentImageEntities);
+        }
     }
 }

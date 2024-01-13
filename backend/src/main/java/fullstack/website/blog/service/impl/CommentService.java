@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.Optional;
 
 import static fullstack.website.blog.utils.common.Search.getPageable;
@@ -50,9 +51,18 @@ public class CommentService implements ICommentService {
      * return new comment
      */
     @Override
-    public CommentDto save(CommentDto commentDto){
+    public CommentDto createComment(CommentDto commentDto){
         Account account = accountRepository.findById(commentDto.getAccountId()).get();
         Post post = postRepository.findById(commentDto.getPostId()).get();
+        commentDto.setCreateAt(new Date());
+        return commentMapper.apply(commentRepository.save(commentMapper.applyToComment(commentDto, post, account)));
+    }
+
+    @Override
+    public CommentDto updateComment(CommentDto commentDto){
+        Account account = accountRepository.findById(commentDto.getAccountId()).get();
+        Post post = postRepository.findById(commentDto.getPostId()).get();
+        commentDto.setUpdateAt(new Date());
         return commentMapper.apply(commentRepository.save(commentMapper.applyToComment(commentDto, post, account)));
     }
 

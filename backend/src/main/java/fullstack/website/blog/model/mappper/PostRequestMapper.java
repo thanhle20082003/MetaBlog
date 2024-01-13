@@ -1,5 +1,8 @@
 package fullstack.website.blog.model.mappper;
 
+import fullstack.website.blog.entity.Account;
+import fullstack.website.blog.entity.Category;
+import fullstack.website.blog.entity.Post;
 import fullstack.website.blog.model.dto.ContentImageDto;
 import fullstack.website.blog.model.dto.PostDto;
 import fullstack.website.blog.model.request.PostRequest;

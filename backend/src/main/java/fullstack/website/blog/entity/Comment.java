@@ -26,6 +26,9 @@ public class Comment {
     @Temporal(TemporalType.DATE)
     private Date createAt;
 
+    @Temporal(TemporalType.DATE)
+    private Date updateAt;
+
     @ManyToOne
     @JoinColumn(name = "account_id")
     private Account account;

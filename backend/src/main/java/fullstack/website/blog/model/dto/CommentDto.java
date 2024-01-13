@@ -10,6 +10,7 @@ import java.util.Date;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
+@ToString
 @Builder
 public class CommentDto {
 
@@ -19,6 +20,8 @@ public class CommentDto {
     private String content;
 
     private Date createAt;
+
+    private Date updateAt;
 
     @NonNull
     private Long accountId;

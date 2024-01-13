@@ -39,4 +39,19 @@ public class PostController {
     public ResponseEntity<Object> createPost(PostRequest postRequest) throws ArchitectureException {
         return ResponseHandler.response(HttpStatus.CREATED, postFacade.createPost(postRequest), true);
     }
+
+    @PutMapping("/update/{postId}")
+    @Operation(summary = "Update a post", description = "Update a post")
+    public ResponseEntity<Object> updatePost(PostRequest postRequest,
+                                             @PathVariable Long postId
+    ) throws ArchitectureException {
+        return ResponseHandler.response(HttpStatus.OK, postFacade.updatePost(postRequest, postId), true);
+    }
+
+    @DeleteMapping("/delete/{postId}")
+    @Operation(summary = "Delete a post", description = "Delete a post for writer")
+    public ResponseEntity<Object> deletePost(@PathVariable Long postId) throws ArchitectureException {
+        postFacade.deletePost(postId);
+        return ResponseHandler.response(HttpStatus.OK, "Delete this post successfully", true);
+    }
 }

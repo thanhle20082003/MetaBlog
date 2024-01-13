@@ -31,13 +31,14 @@ public class CommentFacade {
         if(commentDto.getId() != null) {
             throw new IdMustBeNullException(Comment.class.getSimpleName());
         }
-        return  commentService.save(commentDto);
+        return  commentService.createComment(commentDto);
     }
 
     public CommentDto update(CommentDto commentDto, Long commentId) throws ArchitectureException {
-        checkNotNull(commentId);
+        CommentDto commentOld = checkNotNull(commentId);
         commentDto.setId(commentId);
-        return commentService.save(commentDto);
+        commentDto.setCreateAt(commentOld.getCreateAt());
+        return commentService.updateComment(commentDto);
     }
 
     public CommentDto findById(Long commentId) throws ArchitectureException {

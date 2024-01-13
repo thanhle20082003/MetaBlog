@@ -13,7 +13,13 @@ public interface ICommentService {
      * create and save a new comment
      * return new comment
      */
-    CommentDto save(CommentDto categoryDto);
+    CommentDto createComment(CommentDto categoryDto);
+
+    /*
+     * update  comment
+     * return comment
+     */
+    CommentDto updateComment(CommentDto categoryDto);
 
     /*
      * delete a comment

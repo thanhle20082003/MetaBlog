@@ -20,6 +20,7 @@ public class CommentMapper implements Function<Comment, CommentDto> {
                 .postId(comment.getPost().getId())
                 .content(comment.getContent())
                 .createAt(comment.getCreateAt())
+                .updateAt(comment.getUpdateAt())
                 .accountId(comment.getAccount().getId())
                 .build();
     }
@@ -32,6 +33,7 @@ public class CommentMapper implements Function<Comment, CommentDto> {
                 .account(account)
                 .content(commentDto.getContent())
                 .createAt(commentDto.getCreateAt())
+                .updateAt(commentDto.getUpdateAt())
                 .build();
     }
 }

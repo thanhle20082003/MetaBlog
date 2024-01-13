@@ -40,15 +40,15 @@ public class CommentController {
         return ResponseHandler.response(HttpStatus.CREATED, commentFacade.create(commentDto),true);
     }
 
-    @PutMapping("/update")
+    @PutMapping("/update/{id}")
     @Operation(summary = "Update comment", description = "Update comment for database")
-    public ResponseEntity<Object> updateComment(@RequestParam Long id, @RequestBody CommentDto commentDto) throws ArchitectureException {
+    public ResponseEntity<Object> updateComment(@PathVariable Long id, @RequestBody CommentDto commentDto) throws ArchitectureException {
         return ResponseHandler.response(HttpStatus.OK, commentFacade.update(commentDto, id), true);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/delete/{id}")
     @Operation(summary = "Delete comment", description = "Delete comment for database")
-    public ResponseEntity<Object> deleteComment(@RequestParam Long id) throws ArchitectureException {
+    public ResponseEntity<Object> deleteComment(@PathVariable Long id) throws ArchitectureException {
         commentFacade.delete(id);
         return ResponseHandler.response(HttpStatus.OK, "Delete comment successfully", true);
     }
