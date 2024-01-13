@@ -10,8 +10,6 @@ import java.util.Map;
 
 public class ResponseHandler {
     public static ResponseEntity<Object> response(HttpStatus status, Object data, boolean result){
-        System.out.println(data);
-        System.out.println(status);
         Map<String, Object> map = new HashMap<>();
         try {
             map.put("timestamp", new Date());
