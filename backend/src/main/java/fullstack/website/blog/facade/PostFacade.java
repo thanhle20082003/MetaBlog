@@ -16,6 +16,7 @@ import fullstack.website.blog.repository.AccountRepository;
 import fullstack.website.blog.repository.CategoryRepository;
 import fullstack.website.blog.service.IPostService;
 import fullstack.website.blog.utils.common.SearchCriteria;
+import fullstack.website.blog.utils.enums.PostStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -29,8 +30,8 @@ public class PostFacade {
     private final IPostService postService;
     private final CategoryRepository categoryRepository;
     private final AccountRepository accountRepository;
-    public Page<PostResponse> findAllPost(SearchCriteria searchCriteria) throws ArchitectureException {
-        Page<PostResponse> result = postService.findAll(searchCriteria);
+    public Page<PostResponse> findAllPost(SearchCriteria searchCriteria, PostStatus status) throws ArchitectureException {
+        Page<PostResponse> result = postService.findAllByStatus(searchCriteria, status);
         if (result.isEmpty()) {
             throw new NotFoundException();
         }

@@ -28,12 +28,12 @@ public class AccountController {
     public ResponseEntity<Object> findAllAccount(@RequestParam(defaultValue = "0") Integer page,
                                                  @RequestParam(defaultValue = "20") Integer size,
                                                  @RequestParam(defaultValue = "id") String columSort,
-                                                 @PathVariable(required = false) Role role) throws ArchitectureException {
+                                                 @RequestParam(required = false) Role role) throws ArchitectureException {
         return ResponseHandler.response(HttpStatus.OK, accountFacade.findAllAccount(new SearchCriteria(page, size, columSort), role), true);
     }
 
     @PostMapping("/create")
-    @Operation(summary = "Add new accout", description =  "Add new account, only admin can access")
+    @Operation(summary = "Add new account", description =  "Add new account, only admin can access")
     public ResponseEntity<Object> createAccount(AccountDto accountDto) throws ArchitectureException {
         return ResponseHandler.response(HttpStatus.CREATED, accountFacade.create(accountDto), true);
     }

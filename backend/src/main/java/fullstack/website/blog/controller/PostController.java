@@ -5,6 +5,7 @@ import fullstack.website.blog.facade.PostFacade;
 import fullstack.website.blog.model.common.ResponseHandler;
 import fullstack.website.blog.model.request.PostRequest;
 import fullstack.website.blog.utils.common.SearchCriteria;
+import fullstack.website.blog.utils.enums.PostStatus;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,10 +27,11 @@ public class PostController {
     public ResponseEntity<Object> getAllPost(
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "10") Integer size,
-            @RequestParam(defaultValue = "id") String columSort
+            @RequestParam(defaultValue = "id") String columSort,
+            @RequestParam(required = false) PostStatus status
     ) throws ArchitectureException {
         return ResponseHandler.response(HttpStatus.OK,
-                postFacade.findAllPost(new SearchCriteria(page, size, columSort)),true);
+                postFacade.findAllPost(new SearchCriteria(page, size, columSort), status),true);
     }
 
     @PostMapping("/create")

@@ -19,6 +19,7 @@ import fullstack.website.blog.repository.PostRepository;
 import fullstack.website.blog.service.IPostService;
 import fullstack.website.blog.service.IStorageService;
 import fullstack.website.blog.utils.common.SearchCriteria;
+import fullstack.website.blog.utils.enums.PostStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -42,8 +43,8 @@ public class PostService implements IPostService {
     private final IStorageService storageService;
     private final PostResponseMapper postResponseMapper;
     @Override
-    public Page<PostResponse> findAll(SearchCriteria searchCriteria) {
-        Page<Post> posts = postRepository.findAll(getPageable(searchCriteria));
+    public Page<PostResponse> findAllByStatus(SearchCriteria searchCriteria, PostStatus status) {
+        Page<Post> posts = postRepository.findAllByStatus(getPageable(searchCriteria), status);
         Page<PostDto> postDtos = posts.map(postMapper::apply);
         return postDtos.map(postResponseMapper::apply);
     }
