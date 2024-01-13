@@ -2,6 +2,7 @@ package fullstack.website.blog.service;
 
 import fullstack.website.blog.model.dto.AccountDto;
 import fullstack.website.blog.utils.common.SearchCriteria;
+import fullstack.website.blog.utils.enums.AccountType;
 import fullstack.website.blog.utils.enums.Role;
 import org.springframework.data.domain.Page;
 
@@ -23,4 +24,6 @@ public interface IAccountService {
     AccountDto findByPhoneNumber(String phoneNumber);
 
     AccountDto updateAccount(AccountDto accountDto, Long accountId);
+
+    void lockAnUnLock(AccountDto accountDto, AccountType type);
 }

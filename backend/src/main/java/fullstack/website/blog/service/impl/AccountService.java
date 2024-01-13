@@ -8,6 +8,7 @@ import fullstack.website.blog.service.IAccountService;
 import fullstack.website.blog.service.IEncodePassword;
 import fullstack.website.blog.service.IStorageService;
 import fullstack.website.blog.utils.common.SearchCriteria;
+import fullstack.website.blog.utils.enums.AccountType;
 import fullstack.website.blog.utils.enums.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -101,6 +102,12 @@ public class AccountService implements IAccountService {
         accountDto.setPassword(account.getPassword());
         accountDto.setUsername(account.getUsername());
         return accountMapper.apply(accountRepository.save(accountMapper.applyToAccount(accountDto)));
+    }
+
+    @Override
+    public void lockAnUnLock(AccountDto accountDto, AccountType type) {
+        accountDto.setType(type);
+        accountRepository.save(accountMapper.applyToAccount(accountDto));
     }
 
 }

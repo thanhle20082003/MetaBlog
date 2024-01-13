@@ -4,8 +4,10 @@ import fullstack.website.blog.entity.Comment;
 import fullstack.website.blog.entity.Like;
 import fullstack.website.blog.exception.common.CanNotDeleteException;
 import fullstack.website.blog.exception.common.IdMustBeNullException;
+import fullstack.website.blog.exception.common.InvalidParamException;
 import fullstack.website.blog.exception.common.NotFoundException;
 import fullstack.website.blog.exception.core.ArchitectureException;
+import fullstack.website.blog.model.dto.AccountDto;
 import fullstack.website.blog.model.dto.CommentDto;
 import fullstack.website.blog.model.dto.LikeDto;
 import fullstack.website.blog.service.ILikeService;
@@ -13,33 +15,31 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 @RequiredArgsConstructor
 public class LikeFacade {
 
     private final ILikeService likeService;
 
-    public LikeDto create(LikeDto likeDto) throws ArchitectureException {
-        if(likeDto.getId() != null) {
-            throw new IdMustBeNullException(Like.class.getSimpleName());
+    public void create(Long accountId, Long postId) throws ArchitectureException {
+        if(accountId == null || postId == null) {
+            throw new InvalidParamException();
         }
-        return  likeService.save(likeDto);
+        likeService.save(accountId, postId);
     }
 
-    public void delete(Long commentId) throws ArchitectureException {
-        checkNotNull(commentId);
-        try {
-            likeService.delete(commentId);
-        } catch (DataIntegrityViolationException e) {
-            throw new CanNotDeleteException("comment");
-        }
-    }
-
-    public LikeDto checkNotNull(Long likeId) throws NotFoundException {
-        LikeDto likeDto = likeService.findByLikeId(likeId);
+    public void delete(Long accountId, Long postId) throws ArchitectureException {
+        LikeDto likeDto = likeService.findByAccountIdAndPostId(accountId, postId);
         if (likeDto == null) {
             throw new NotFoundException();
         }
-        return likeDto;
+        try {
+            likeService.delete(likeDto.getId());
+        } catch (DataIntegrityViolationException e) {
+            throw new CanNotDeleteException("like");
+        }
     }
+
 }

@@ -11,5 +11,7 @@ import java.util.Set;
 public interface LikeRepository extends JpaRepository<Like, Long> {
     Optional<Like> findByPostId(Long postId);
 
+    Optional<Like> findByAccountIdAndPostId(Long accountId, Long postId);
+
     Set<Like> findAllByPostId(Long postId);
 }

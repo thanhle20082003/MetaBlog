@@ -16,6 +16,8 @@ public interface ILikeService {
      */
     LikeDto findByLikeId(Long id);
 
+    LikeDto findByAccountIdAndPostId(Long accountId, Long postId);
+
     /*
      * find like by post id
      * param id
@@ -23,7 +25,7 @@ public interface ILikeService {
      */
     LikeDto findByPostId(Long postId);
 
-    LikeDto save(LikeDto likeDto);
+    void save(Long accountId, Long postId);
 
     Set<LikeDto> findAllByPostId(Long postId);
 

@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -44,6 +45,12 @@ public class LikeService implements ILikeService {
         return like.map(likeMapper::apply).orElse(null);
     }
 
+    @Override
+    public LikeDto findByAccountIdAndPostId(Long accountId, Long postId) {
+        Optional<Like> like = likeRepository.findByAccountIdAndPostId(accountId, postId);
+        return like.map(likeMapper::apply).orElse(null);
+    }
+
     /*
      * find like by post id
      * param id
@@ -62,10 +69,14 @@ public class LikeService implements ILikeService {
      */
 
     @Override
-    public LikeDto save(LikeDto likeDto){
-        Account account = accountRepository.findById(likeDto.getAccountId()).get();
-        Post post = postRepository.findById(likeDto.getPostId()).get();
-        return likeMapper.apply(likeRepository.save(likeMapper.applyToLike(likeDto, account, post)));
+    public void save(Long accountId, Long postId) {
+        LikeDto likeDto = new LikeDto();
+        likeDto.setAccountId(accountId);
+        likeDto.setPostId(postId);
+        likeDto.setCreateAt(new Date());
+        Account account = accountRepository.findById(accountId).get();
+        Post post = postRepository.findById(postId).get();
+        likeRepository.save(likeMapper.applyToLike(likeDto, account, post));
     }
 
     @Override

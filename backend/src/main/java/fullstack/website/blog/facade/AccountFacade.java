@@ -7,6 +7,7 @@ import fullstack.website.blog.exception.core.ArchitectureException;
 import fullstack.website.blog.model.dto.AccountDto;
 import fullstack.website.blog.service.IAccountService;
 import fullstack.website.blog.utils.common.SearchCriteria;
+import fullstack.website.blog.utils.enums.AccountType;
 import fullstack.website.blog.utils.enums.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -80,4 +81,19 @@ public class AccountFacade {
     }
 
 
+    public void lockAndUnLock(Long accountId, AccountType type) throws ArchitectureException{
+        AccountDto accountDto = accountService.findById(accountId);
+        if(accountDto == null) throw new NotFoundException();
+        if(accountDto.getType().equals(type)) {
+            throw new DescriptionException("Account status matches the desired status.");
+        } else {
+            accountService.lockAnUnLock(accountDto, type);
+        }
+    }
+
+    public void delete(Long accountId) throws ArchitectureException{
+        AccountDto accountDto = accountService.findById(accountId);
+        if(accountDto == null) throw new NotFoundException();
+        accountService.deleteAccount(accountId);
+    }
 }

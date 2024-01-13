@@ -23,14 +23,15 @@ public class LikeController {
 
     @PostMapping("/like")
     @Operation(summary = "Like the post", description = "Add new like for database")
-    public ResponseEntity<Object> createComment(@RequestBody LikeDto likeDto) throws ArchitectureException {
-        return ResponseHandler.response(HttpStatus.CREATED, likeFacade.create(likeDto),true);
+    public ResponseEntity<Object> createComment(@RequestParam Long accountId, @RequestParam Long postId) throws ArchitectureException {
+        likeFacade.create(accountId, postId);
+        return ResponseHandler.response(HttpStatus.CREATED, "Like this post successfully",true);
     }
 
     @DeleteMapping("/unlike")
     @Operation(summary = "Unlike the post", description = "Unlike for database")
-    public ResponseEntity<Object> deleteComment(@RequestParam Long id) throws ArchitectureException {
-        likeFacade.delete(id);
+    public ResponseEntity<Object> deleteComment(@RequestParam Long accountId, @RequestParam Long postId) throws ArchitectureException {
+        likeFacade.delete(accountId, postId);
         return ResponseHandler.response(HttpStatus.OK, "Unlike this post successfully", true);
     }
 }

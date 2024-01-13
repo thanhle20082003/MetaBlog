@@ -5,6 +5,7 @@ import fullstack.website.blog.facade.AccountFacade;
 import fullstack.website.blog.model.common.ResponseHandler;
 import fullstack.website.blog.model.dto.AccountDto;
 import fullstack.website.blog.utils.common.SearchCriteria;
+import fullstack.website.blog.utils.enums.AccountType;
 import fullstack.website.blog.utils.enums.Role;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -43,5 +44,21 @@ public class AccountController {
                                                 @PathVariable Long accountId
     ) throws ArchitectureException {
         return ResponseHandler.response(HttpStatus.OK, accountFacade.update(accountDto, accountId), true);
+    }
+
+    @PutMapping("/lock/{accountId}")
+    @Operation(summary = "Lock account", description = "Lock account for admin")
+    public ResponseEntity<Object> lockAccount(@PathVariable Long accountId,
+                                              @RequestParam AccountType type
+    ) throws ArchitectureException {
+        accountFacade.lockAndUnLock(accountId, type);
+        return ResponseHandler.response(HttpStatus.LOCKED, "This account was locking", true);
+    }
+
+    @DeleteMapping("delete/{accountId}")
+    @Operation(summary = "Delete account", description = "Delete account for admin")
+    public ResponseEntity<Object> deleteAccount(@PathVariable Long accountId) throws ArchitectureException {
+        accountFacade.delete(accountId);
+        return ResponseHandler.response(HttpStatus.OK, "Delete account successfully", true);
     }
 }
