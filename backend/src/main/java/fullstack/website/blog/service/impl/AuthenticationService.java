@@ -2,6 +2,8 @@ package fullstack.website.blog.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fullstack.website.blog.entity.Account;
+import fullstack.website.blog.model.dto.AccountDto;
+import fullstack.website.blog.model.mappper.AccountMapper;
 import fullstack.website.blog.model.mappper.RegisterMapper;
 import fullstack.website.blog.model.request.RegisterRequest;
 import fullstack.website.blog.model.response.JWTAuthenticationResponse;
@@ -12,15 +14,15 @@ import fullstack.website.blog.service.IJWTService;
 import fullstack.website.blog.service.IMailerService;
 import fullstack.website.blog.utils.enums.AccountType;
 import jakarta.mail.MessagingException;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.Date;
+
+import static fullstack.website.blog.utils.api.fe.FrontEndApi.URL_LOGIN;
 
 @Service
 @RequiredArgsConstructor
@@ -31,16 +33,16 @@ public class AuthenticationService  implements IAuthenticationService {
     private final IMailerService mailerService;
     private final IEncodePassword encodePassword;
     private final AccountRepository accountRepository;
+    private final AccountMapper accountMapper;
 
     @Override
     @Transactional(rollbackOn = MessagingException.class)
     public String verifyEmailRegister(RegisterRequest request) throws MessagingException {
-        System.out.println(request.getPassword());
         Account account = registerMapper.apply(request);
         String token = jwtService.generateToken(account);
         account.setAccessToken(token);
         accountRepository.save(account);
-//        mailerService.sendVerifyEmail(account.getEmail(), token, URL_LOGIN);
+        mailerService.sendVerifyEmail(account.getEmail(), token, URL_LOGIN);
         return token;
     }
 
@@ -50,6 +52,14 @@ public class AuthenticationService  implements IAuthenticationService {
         account.setType(AccountType.ACTIVE);
         Account accountUpdate = accountRepository.save(account);
         mailerService.sendWelcomeEmail(accountUpdate.getEmail(), accountUpdate.getUsername());
+    }
+
+    @Override
+    public AccountDto forgotPass(Account account) throws MessagingException {
+        account.setPassword(encodePassword.encodePassword(account.getPassword()));
+        Account accountUpdate = accountRepository.save(account);
+        mailerService.sendForgotPW(accountUpdate.getEmail(), accountUpdate.getUsername());
+        return accountMapper.apply(accountUpdate);
     }
 
     @Override

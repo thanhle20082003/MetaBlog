@@ -22,13 +22,13 @@ public class MailerService implements IMailerService {
 
     @Override
     public void sendVerifyEmail(String receiverEmail, String token, String api) throws MessagingException {
-//        message.setRecipients(
-//                Message.RecipientType.TO,
-//                new InternetAddress[]{new InternetAddress(receiverEmail)});
-//
-//        message.setSubject(VERIFY_EMAIL_SUBJECT);
-//        message.setContent(thymeleafService.getVerifyEmailContent(token, api), CONTENT_TYPE_TEXT_HTML);
-//        Transport.send(message);
+        message.setRecipients(
+                Message.RecipientType.TO,
+                new InternetAddress[]{new InternetAddress(receiverEmail)});
+
+        message.setSubject(VERIFY_EMAIL_SUBJECT);
+        message.setContent(thymeleafService.getVerifyEmailContent(token, api), CONTENT_TYPE_TEXT_HTML);
+        Transport.send(message);
     }
 
     @Override
@@ -43,14 +43,14 @@ public class MailerService implements IMailerService {
     }
 
     @Override
-    public void sendChangePassEmail(String receiverEmail, String username) throws MessagingException {
+    public void sendForgotPW(String receiverEmail, String username) throws MessagingException {
         message.setRecipients(
                 Message.RecipientType.TO,
                 new InternetAddress[]{new InternetAddress(receiverEmail)});
 
         message.setSubject(CHANGE_PASS_EMAIL_SUBJECT);
         message.setContent(thymeleafService
-                        .getChangePassEmailContent(username),
+                        .getForgotPWEmailContent(username),
                 CONTENT_TYPE_TEXT_HTML);
         Transport.send(message);
     }

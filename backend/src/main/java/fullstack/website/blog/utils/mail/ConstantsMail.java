@@ -14,12 +14,12 @@ public class ConstantsMail {
         public static final class Subject{
             public static final String VERIFY_EMAIL_SUBJECT = "Verify your email account at MetaBlog";
             public static final String WELCOME_EMAIL_SUBJECT = "Welcome to MetaBlog";
-            public static final String CHANGE_PASS_EMAIL_SUBJECT = "Change password success at The Trendy Fashionista";
+            public static final String CHANGE_PASS_EMAIL_SUBJECT = "Change password success at MetaBlog";
         }
         public static final class Template{
             public static final String TEMPLATE_VERIFY_NAME = "verifyEmail";
             public static final String TEMPLATE_WELCOME_NAME = "welcomeEmail";
-            public static final String TEMPLATE_CHANGE_PASS_NAME = "changePassEmail";
+            public static final String TEMPLATE_FORGOT_PW_NAME = "forgotPassword";
         }
     }
 }

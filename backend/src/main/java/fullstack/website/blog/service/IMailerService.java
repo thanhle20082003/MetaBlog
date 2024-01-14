@@ -7,5 +7,5 @@ public interface IMailerService {
 
     void sendWelcomeEmail(String receiverEmail, String username) throws MessagingException;
 
-    void sendChangePassEmail(String receiverEmail, String username) throws MessagingException;
+    void sendForgotPW(String receiverEmail, String username) throws MessagingException;
 }

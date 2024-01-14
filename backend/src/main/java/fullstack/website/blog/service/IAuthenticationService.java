@@ -1,6 +1,7 @@
 package fullstack.website.blog.service;
 
 import fullstack.website.blog.entity.Account;
+import fullstack.website.blog.model.dto.AccountDto;
 import fullstack.website.blog.model.request.RegisterRequest;
 import fullstack.website.blog.model.response.JWTAuthenticationResponse;
 import jakarta.mail.MessagingException;
@@ -16,6 +17,8 @@ public interface IAuthenticationService {
 
     @Transactional(rollbackOn = MessagingException.class)
     void register(Account account) throws MessagingException;
+
+    AccountDto forgotPass(Account account) throws MessagingException;
 
     JWTAuthenticationResponse login(Account account);
 

@@ -65,10 +65,10 @@ public class ThymeleafService implements IThymeleafService {
     }
 
     @Override
-    public String getChangePassEmailContent(String username) {
+    public String getForgotPWEmailContent(String username) {
         final Context context = new Context();
         context.setVariable("url", FRONT_END_BASE_API);
         context.setVariable("username", username);
-        return templateEngine.process(TEMPLATE_CHANGE_PASS_NAME, context);
+        return templateEngine.process(TEMPLATE_FORGOT_PW_NAME, context);
     }
 }

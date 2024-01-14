@@ -3,6 +3,7 @@ package fullstack.website.blog.controller;
 import fullstack.website.blog.exception.core.ArchitectureException;
 import fullstack.website.blog.facade.AuthenticationFacade;
 import fullstack.website.blog.model.common.ResponseHandler;
+import fullstack.website.blog.model.request.ForgotPWRequest;
 import fullstack.website.blog.model.request.LoginRequest;
 import fullstack.website.blog.model.request.RegisterRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -58,6 +59,17 @@ public class AuthenticationController {
             HttpServletResponse response
     ) throws ArchitectureException, IOException {
         authenticationFacade.refreshToken(request, response);
+    }
+
+    /**
+     * Anyone can access
+     */
+    @PostMapping("/forgot-password")
+    @Operation(summary = "Verify email", description = "Anyone can get new password")
+    public ResponseEntity<Object> forGotPassword(@RequestBody ForgotPWRequest request)
+            throws ArchitectureException, MessagingException, IOException {
+        return ResponseHandler.response(HttpStatus.OK,
+                authenticationFacade.forGotPass(request), true);
     }
 
 }

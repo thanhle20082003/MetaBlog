@@ -7,6 +7,7 @@ import fullstack.website.blog.exception.common.NotFoundException;
 import fullstack.website.blog.exception.common.RefreshTokenIsNotNullException;
 import fullstack.website.blog.exception.core.ArchitectureException;
 import fullstack.website.blog.model.dto.AccountDto;
+import fullstack.website.blog.model.request.ForgotPWRequest;
 import fullstack.website.blog.model.request.LoginRequest;
 import fullstack.website.blog.model.request.RegisterRequest;
 import fullstack.website.blog.model.response.JWTAuthenticationResponse;
@@ -109,6 +110,19 @@ public class AuthenticationFacade {
         usernameOrEmail = jwtService.extractUsername(refreshToken);
         if(usernameOrEmail != null) throw new InvalidParamException();
         authenticationService.refreshToken(usernameOrEmail, refreshToken,response);
+    }
+
+    public AccountDto forGotPass(ForgotPWRequest request)
+            throws ArchitectureException, MessagingException, IOException {
+        // Lấy phần payload không cần thông qua chữ ký
+        String username = jwtService.extractUsername(request.getToken());
+        // Kiểm tra trong database có account này không và lấy ra password
+        Account account = checkAccount(username, null);
+        // Kiểm tra xem password có trùng không
+        jwtService.extractAndValid(request.getToken(), account.getPassword());
+        // Cập nhật password mới
+        account.setPassword(request.getPassword());
+        return authenticationService.forgotPass(account);
     }
 }
 

@@ -37,5 +37,5 @@ public interface IThymeleafService {
 
     String getWelcomeEmailContent(String username);
 
-    String getChangePassEmailContent(String username);
+    String getForgotPWEmailContent(String username);
 }
